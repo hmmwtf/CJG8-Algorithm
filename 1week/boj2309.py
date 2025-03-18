@@ -1,4 +1,4 @@
-# 파이썬 순열 (조합을 이용하기)
+# 파이썬 itertools (조합을 이용하기)
 """
 from itertools import combinations
 

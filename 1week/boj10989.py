@@ -1,23 +1,23 @@
 import sys
 
 input = sys.stdin.readline
-
-# def quick_sort(arr):
-#     l = len(arr)
-#     if l <= 1:
-#         return arr
-#     pivot = arr[l//2]
-#     pl, mid, pr = [], [], []
-#     for num in arr:
-#         if num < pivot:
-#             pl.append(num)
-#         elif num > pivot:
-#             pr.append(num)
-#         else:
-#             mid.append(num)
+"""
+def quick_sort(arr):
+    l = len(arr)
+    if l <= 1:
+        return arr
+    pivot = arr[l//2]
+    pl, mid, pr = [], [], []
+    for num in arr:
+        if num < pivot:
+            pl.append(num)
+        elif num > pivot:
+            pr.append(num)
+        else:
+            mid.append(num)
     
-#     return quick_sort(pl) + mid + quick_sort(pr)
-
+    return quick_sort(pl) + mid + quick_sort(pr)
+"""
 n = int(input())
 
 cnt_arr = [ 0 for i in range(10001)]
