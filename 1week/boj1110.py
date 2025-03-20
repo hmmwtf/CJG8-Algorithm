@@ -1,19 +1,22 @@
-def pluscycle(n):
-    start = n
+def plus_cycle(n):
     cnt = 0
+    first = n
+
     while True:
         ten_digit = n // 10
         digit = n % 10
 
-        sum_digit = ten_digit + digit
+        sum_digit = (ten_digit + digit) % 10
 
-        newNum = digit * 10 + sum_digit % 10
+        nextN = digit * 10 + sum_digit
 
-        cnt += 1
+        if first == nextN:
+            cnt += 1
+            break
+        else:
+            cnt += 1
+        n = nextN
+    return cnt
 
-        if newNum == start:
-            return cnt
-        n = newNum
-        
-num = int(input())
-print(pluscycle(num))
+n = int(input())
+print(plus_cycle(n))
