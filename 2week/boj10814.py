@@ -2,22 +2,15 @@ import sys
 
 input = sys.stdin.readline
 
-n = int(input())
+n = int(input().strip())
+member = []
 
-for i in range(n):
-    info = input()
-    result = []
-    valid = True
-    for j in range(len(info)):
-        if info[j] == '(':
-            result.append(info[j])
-        elif info[j] == ')':
-            try:
-                result.pop()
-            except IndexError:
-                valid = False
-                break
-    if len(result) == 0 and valid:
-        print("YES")
-    else:
-        print("NO")
+for _ in range(n):
+    age, name = input().strip().split()
+    age = int(age)
+    member.append((age, name))
+    
+member.sort(key=lambda member : member[0])
+
+for age, name in member:
+    print(age, name)
