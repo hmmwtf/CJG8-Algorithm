@@ -1,67 +1,47 @@
-# 각 원을 나타내는 클래스 (원 정보와 자식 노드 리스트 포함)
-class CircleNode:
-    def __init__(self, x, r):
-        self.x = x
-        self.r = r
-        self.left = x - r
-        self.right = x + r
-        self.children = []  # 이 원의 내부에 포함(또는 접)하는 원들
-
-def build_tree(circles):
-    # circles: 원 객체들의 리스트
-    # 원들을 왼쪽 끝점 기준으로 정렬
-    circles.sort(key=lambda c: c.left)
-    root_nodes = []
-    
-    # 각 원을 순회하며 포함/접촉 관계에 따라 트리 구성 (간단한 방식의 pseudocode)
-    for circle in circles:
-        parent_found = False
-        # 이미 트리에 있는 원들 중, 현재 원을 포함할 수 있는 가장 작은 원(적절한 부모)를 찾음
-        for root in root_nodes:
-            if root.left <= circle.left and circle.right <= root.right:
-                # 부모 후보가 있다면, 재귀적으로 자식 노드 리스트에 삽입하는 함수를 호출
-                insert_child(root, circle)
-                parent_found = True
-                break
-        if not parent_found:
-            root_nodes.append(circle)
-    return root_nodes
-
-def insert_child(parent, child):
-    # 만약 부모의 자식 중, child를 포함할 수 있는 더 작은 원이 있다면 거기로 이동
-    for sub in parent.children:
-        if sub.left <= child.left and child.right <= sub.right:
-            insert_child(sub, child)
-            return
-    # 그렇지 않으면, parent의 자식으로 child를 추가
-    parent.children.append(child)
-
-def count_regions(node):
-    # node: CircleNode
-    # 기본적으로, 하나의 원은 평면을 2개의 영역으로 분할한다.
-    # 그러나 부모 내부에 여러 자식이 존재하면, 자식들 사이의 접점을 보정해야 함.
-    # 여기서는 간단히, 각 노드는 1개의 추가 영역을 만든다고 가정.
-    regions = 1  # 이 원이 추가하는 기본 영역
-    for child in node.children:
-        regions += count_regions(child) - 1  # 자식이 만드는 영역 중, 접점 보정 (중복 영역 제거)
-    return regions
-
-def total_regions(root_nodes):
-    # 트리의 모든 루트 노드에 대해 계산하고, 외부 영역 1을 더함.
-    regions = 0
-    for root in root_nodes:
-        regions += count_regions(root)
-    return regions + 1
-
-# 사용 예시:
-# 입력 처리
 import sys
+sys.setrecursionlimit(100000)	# 최대 재귀 깊이를 10만으로 설정
 input = sys.stdin.readline
-N = int(input().strip())
-circles = []
-for _ in range(N):
-    x, r = map(int, input().split())
-    circles.append(CircleNode(x, r))
+MX = int(1e9)+1
 
-roots = build_tree(circles)
-print(total_regions(roots))
+class CircleNode:
+    def __init__(self, st, en):
+        self.st = st                # 원의 시작점
+        self.en = en                # 원의 끝점
+        self.dia = en - st          # 원의 지름 
+        self.children = []          # 자식 원 목록
+
+def append_circle(node):
+    global IDX
+    # 더 이상 삽입할 원이 없거나, 다음 원이 현재 노드의 범위를 벗어나는 경우 종료
+    while IDX < n and circles[IDX][1] <= node.en:
+        child = CircleNode(circles[IDX][0], circles[IDX][1])
+        node.children.append(child)
+        IDX += 1
+        append_circle(child)
+
+def cal_area(node):
+    global COUNT
+    # 하나의 원에 대해 영역 추가
+    COUNT += 1
+    # 자식 원들에 대해서 재귀적으로 호출 
+    children_diameter_sum = 0
+    for child in node.children:
+        children_diameter_sum += child.dia
+        cal_area(child)
+    # 자식 원들이 부모 원을 꽉 채우는 경우 영역 추가
+    if children_diameter_sum == node.dia:
+        COUNT += 1
+
+n = int(input())
+circles = []
+for _ in range(n):
+    x, r = map(int, input().split())
+    circles.append((x - r, x + r))
+circles.sort(key = lambda x : (x[0], -x[1]))
+
+root = CircleNode(-MX, MX)
+IDX, COUNT = 0, 0
+append_circle(root)
+cal_area(root)
+
+print(COUNT)

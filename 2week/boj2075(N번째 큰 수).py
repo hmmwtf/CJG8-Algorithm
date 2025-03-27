@@ -6,8 +6,13 @@ q = []
 
 for i in range(n):
     num = list(map(int, input().split()))
-    for j in num:
-        heapq.heappush(q, -j)
-for i in range(n - 1):
-    heapq.heappop(q)
-print(-q[0])
+    if not q:
+        for n in num:
+            heapq.heappush(q, n)
+    else:
+        for n in num:
+            if q[0] < n:
+                heapq.heappush(q, n)
+                heapq.heappop(q)
+
+print(q[0])
