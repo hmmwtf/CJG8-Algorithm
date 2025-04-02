@@ -42,3 +42,57 @@ dfs(v)
 print(" ".join(map(str, dfs_result)))
 bfs(v)
 print(" ".join(map(str, bfs_result)))
+
+
+
+
+
+
+
+
+import sys
+from collections import deque
+input = sys.stdin.readline
+
+n, m, v = map(int, input().strip().split())
+
+graph= [[] for _ in range(n + 1)]
+
+for _ in range(m):
+    a, b = map(int, input().strip().split())
+    graph[a].append(b)
+    graph[b].append(a)
+    
+for i in range(1, n+1):
+    graph[i].sort()
+
+def DFS(graph, start):
+    visit = []
+    stack = []
+    stack.append(start)
+    
+    while stack:
+        node = stack.pop()
+        if node not in visit:
+            visit.append(node)
+            stack.extend(reversed(graph[node]))
+    
+    return visit
+
+def BFS(graph, start):
+    visit = []
+    q = deque()
+    q.append(start)
+    
+    while q:
+        node = q.popleft()
+        if node not in visit:
+            visit.append(node)
+            q.extend(graph[node])
+            
+    return visit
+
+dfs = DFS(graph, v)
+print(" ".join(map(str, dfs)))
+bfs = BFS(graph, v)
+print(" ".join(map(str, bfs)))
