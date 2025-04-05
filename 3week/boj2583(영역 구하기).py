@@ -34,3 +34,12 @@ for i in range(m):
 areas.sort()
 print(len(areas))
 print(' '.join(map(str, areas)))
+
+
+
+
+
+
+import sys
+input = sys.stdin.readline
+

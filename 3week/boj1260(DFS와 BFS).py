@@ -44,12 +44,7 @@ bfs(v)
 print(" ".join(map(str, bfs_result)))
 
 
-
-
-
-
-
-
+# stack을 이용한 DFS, queue를 이용한 BFS
 import sys
 from collections import deque
 input = sys.stdin.readline
